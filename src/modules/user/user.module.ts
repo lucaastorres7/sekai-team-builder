@@ -12,5 +12,6 @@ import { PrismaModule } from '@/prisma/prisma.module';
     UserService,
     { provide: IUserRepository, useClass: PrismaUserRepository },
   ],
+  exports: [{ provide: IUserRepository, useClass: PrismaUserRepository }],
 })
 export class UserModule {}
