@@ -21,6 +21,7 @@ model User {
 model Character {
   id       String @id @default(uuid())
   name     String
+  surname  String
   unit     String
   imageUrl String
 
