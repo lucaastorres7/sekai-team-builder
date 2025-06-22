@@ -6,7 +6,7 @@ export class CharacterController {
   constructor(private readonly characterService: CharacterService) {}
 
   @Get()
-  getCharacters() {
-    return this.characterService.getAll();
+  getCharacters(@Query('name') query: string) {
+    return this.characterService.getAll(query || '');
   }
 }

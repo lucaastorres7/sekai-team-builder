@@ -5,8 +5,8 @@ import { ICharacterRepository } from './character-interface';
 export class CharacterService {
   constructor(private readonly character: ICharacterRepository) {}
 
-  getAll() {
-    const characters = this.character.getAll();
+  getAll(query: string) {
+    const characters = this.character.getAll(query || '');
     return characters;
   }
 }
