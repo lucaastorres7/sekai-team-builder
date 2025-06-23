@@ -3,6 +3,7 @@ import { any, z } from 'zod';
 
 export const updateCardSchema = z.object({
   title: z.string().optional(),
+  power: z.number().optional(),
   rarity: z.nativeEnum(CardRarity).optional(),
   attribute: z.nativeEnum(CardAttribute).optional(),
   imageUrl: z.string().url().optional(),
@@ -11,6 +12,7 @@ export const updateCardSchema = z.object({
 
 export const createCardSchema = z.object({
   title: z.string(),
+  power: z.number(),
   rarity: z.nativeEnum(CardRarity),
   attribute: z.nativeEnum(CardAttribute),
   imageUrl: z.string().url(),
@@ -20,6 +22,7 @@ export const createCardSchema = z.object({
 export const cardSchema = z.object({
   id: z.string().uuid(),
   title: z.string(),
+  power: z.number(),
   rarity: z.nativeEnum(CardRarity),
   attribute: z.nativeEnum(CardAttribute),
   imageUrl: z.string().url(),

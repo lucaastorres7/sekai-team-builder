@@ -20,11 +20,11 @@ model User {
 }
 
 model Character {
-  id       String @id @default(uuid())
-  name     String
-  surname  String?
-  unit     Units
-  imageUrl String
+  id        String @id @default(uuid())
+  name      String
+  surname   String?
+  unit      Units
+  imageUrl  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -34,11 +34,12 @@ model Character {
 model Card {
   id          String @id @default(uuid())
   title       String @unique()
+  power       Int
   rarity      CardRarity
   attribute   CardAttribute
   imageUrl    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   characterId String
   character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade) // Uma carta pertence a um personagem
