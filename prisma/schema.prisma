@@ -22,9 +22,11 @@ model User {
 model Character {
   id       String @id @default(uuid())
   name     String
-  surname  String
+  surname  String?
   unit     Units
   imageUrl String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   card Card[]
 }
@@ -35,6 +37,8 @@ model Card {
   rarity      CardRarity
   attribute   CardAttribute
   imageUrl    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   characterId String
   character   Character @relation(fields: [characterId], references: [id]) // Uma carta pertence a um personagem
@@ -74,4 +78,5 @@ enum Units {
   VIVID_SQUAD
   SHOWTIME
   MORE_JUMP
+  VOCALOID
 }

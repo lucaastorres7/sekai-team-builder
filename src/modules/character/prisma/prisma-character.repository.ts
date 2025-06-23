@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ICharacterRepository } from '../character-interface';
-import { CharacterSchema } from '../schemas/character.schema';
+import {
+  CharacterSchema,
+  CreateCharacterSchema,
+} from '../schemas/character.schema';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -30,5 +33,21 @@ export class PrismaCharacterRepository implements ICharacterRepository {
     });
 
     return characters;
+  }
+
+  async create(data: CreateCharacterSchema): Promise<CharacterSchema> {
+    const exist = await this.prisma.character.findFirst({
+      where: { name: data.name, unit: data.unit },
+    });
+
+    if (exist) {
+      throw new BadRequestException(
+        `there is already a ${exist.name} in ${exist.unit}`,
+      );
+    }
+
+    const character = await this.prisma.character.create({ data });
+
+    return character;
   }
 }
