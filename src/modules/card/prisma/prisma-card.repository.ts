@@ -4,7 +4,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { ICardRepository } from '../card-interface';
-import { CardSchema, CreateCardSchema } from '../schema/card.schema';
+import {
+  CardSchema,
+  CreateCardSchema,
+  UpdateCardSchema,
+} from '../schema/card.schema';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Injectable()
@@ -58,5 +62,32 @@ export class PrismaCardRepository implements ICardRepository {
     const card = await this.prisma.card.create({ data });
 
     return card;
+  }
+
+  async update(data: UpdateCardSchema, id: string): Promise<boolean> {
+    const exist = await this.prisma.card.findUnique({ where: { id } });
+
+    if (!exist) {
+      throw new NotFoundException('This card does not exist');
+    }
+
+    const card = await this.prisma.card.update({
+      where: { id },
+      data,
+    });
+
+    return true;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const card = await this.prisma.card.findUnique({ where: { id } });
+
+    if (!card) {
+      throw new NotFoundException('this card does not exist');
+    }
+
+    await this.prisma.card.delete({ where: { id } });
+
+    return true;
   }
 }

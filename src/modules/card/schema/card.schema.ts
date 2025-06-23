@@ -1,6 +1,14 @@
 import { CardAttribute, CardRarity } from '@prisma/client';
 import { any, z } from 'zod';
 
+export const updateCardSchema = z.object({
+  title: z.string().optional(),
+  rarity: z.nativeEnum(CardRarity).optional(),
+  attribute: z.nativeEnum(CardAttribute).optional(),
+  imageUrl: z.string().url().optional(),
+  characterId: z.string().uuid().optional(),
+});
+
 export const createCardSchema = z.object({
   title: z.string(),
   rarity: z.nativeEnum(CardRarity),
@@ -24,3 +32,4 @@ export const cardWithTeamsSchema = cardSchema.extend({
 
 export type CreateCardSchema = z.infer<typeof createCardSchema>;
 export type CardSchema = z.infer<typeof cardSchema>;
+export type UpdateCardSchema = z.infer<typeof updateCardSchema>;

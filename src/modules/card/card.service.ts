@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ICardRepository } from './card-interface';
-import { CreateCardSchema } from './schema/card.schema';
+import { CreateCardSchema, UpdateCardSchema } from './schema/card.schema';
 
 @Injectable()
 export class CardService {
@@ -16,5 +16,13 @@ export class CardService {
 
   create(data: CreateCardSchema) {
     return this.card.create(data);
+  }
+
+  update(data: UpdateCardSchema, id: string) {
+    return this.card.update(data, id);
+  }
+
+  delete(id: string) {
+    return this.card.delete(id);
   }
 }
