@@ -106,4 +106,20 @@ export class PrismaTeamRepository implements ITeamRepository {
 
     return true;
   }
+
+  async delete(teamId: string, userId: string): Promise<boolean> {
+    const team = await this.prisma.team.findUnique({ where: { id: teamId } });
+
+    if (!team) {
+      throw new NotFoundException('this team does not exist');
+    }
+
+    if (userId !== team.userId) {
+      throw new ForbiddenException('This team is not yours');
+    }
+
+    await this.prisma.team.delete({ where: { id: teamId } });
+
+    return true;
+  }
 }

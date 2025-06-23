@@ -22,4 +22,8 @@ export class TeamService {
   updateTeam(data: UpdateTeamSchema, teamId: string, userId: string) {
     return this.team.update(data, teamId, userId);
   }
+
+  deleteTeam(teamId: string, userId: string) {
+    return this.team.delete(teamId, userId);
+  }
 }

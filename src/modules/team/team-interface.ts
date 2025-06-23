@@ -20,4 +20,5 @@ export abstract class ITeamRepository {
     teamId: string,
     userId: string,
   ): Promise<boolean>;
+  abstract delete(teamId: string, userId: string): Promise<boolean>;
 }

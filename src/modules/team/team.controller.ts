@@ -2,6 +2,7 @@ import { AuthGuard } from '@/security/guards/auth.guard';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -63,5 +64,12 @@ export class TeamController {
     const userId = req.user.sub;
 
     return this.teamService.updateTeam(data, teamId, userId);
+  }
+
+  @Delete('/:id')
+  deleteTeam(@Param('id') teamId: string, @Req() req: Request) {
+    const userId = req.user.sub;
+
+    return this.teamService.deleteTeam(teamId, userId);
   }
 }
