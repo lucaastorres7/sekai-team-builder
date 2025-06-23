@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ITeamRepository } from './team-interface';
-import { TeamSchema } from './schema/team.schema';
+import { TeamSchema, UpdateTeamSchema } from './schema/team.schema';
 import { PageQuerySchema } from './schema/page-query.schema';
 
 @Injectable()
@@ -17,5 +17,9 @@ export class TeamService {
 
   getTeam(teamId: string, userId: string) {
     return this.team.getById(teamId, userId);
+  }
+
+  updateTeam(data: UpdateTeamSchema, teamId: string, userId: string) {
+    return this.team.update(data, teamId, userId);
   }
 }

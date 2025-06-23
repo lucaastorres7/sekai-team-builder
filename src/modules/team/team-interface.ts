@@ -1,5 +1,9 @@
 import { PageQuerySchema } from './schema/page-query.schema';
-import { CreatedTeamSchema, TeamSchema } from './schema/team.schema';
+import {
+  CreatedTeamSchema,
+  TeamSchema,
+  UpdateTeamSchema,
+} from './schema/team.schema';
 
 export abstract class ITeamRepository {
   abstract create(data: TeamSchema, userId: string): Promise<CreatedTeamSchema>;
@@ -11,4 +15,9 @@ export abstract class ITeamRepository {
     teamId: string,
     userId: string,
   ): Promise<CreatedTeamSchema | null>;
+  abstract update(
+    data: UpdateTeamSchema,
+    teamId: string,
+    userId: string,
+  ): Promise<boolean>;
 }

@@ -9,6 +9,7 @@ import {
   CreatedTeamSchema,
   teamSchema,
   TeamSchema,
+  UpdateTeamSchema,
 } from '../schema/team.schema';
 import { PageQuerySchema } from '../schema/page-query.schema';
 
@@ -73,5 +74,36 @@ export class PrismaTeamRepository implements ITeamRepository {
     }
 
     return team;
+  }
+
+  async update(
+    body: UpdateTeamSchema,
+    teamId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const { cardsId, name } = body;
+    const cardsToConnect = cardsId?.map((card) => ({ id: card }));
+
+    const team = await this.prisma.team.findUnique({ where: { id: teamId } });
+
+    if (!team) {
+      throw new NotFoundException('this team does not exist');
+    }
+
+    if (userId !== team.userId) {
+      throw new ForbiddenException('This team is not yours');
+    }
+
+    const changeTeam = await this.prisma.team.update({
+      where: { id: teamId },
+      data: {
+        name,
+        cards: {
+          connect: cardsToConnect,
+        },
+      },
+    });
+
+    return true;
   }
 }

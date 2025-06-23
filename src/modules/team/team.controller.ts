@@ -5,13 +5,19 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   Req,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { TeamService } from './team.service';
-import { teamSchema, TeamSchema } from './schema/team.schema';
+import {
+  teamSchema,
+  TeamSchema,
+  UpdateTeamSchema,
+  updateTeamSchema,
+} from './schema/team.schema';
 import { Request } from 'express';
 import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
 import { pageQuerySchema, PageQuerySchema } from './schema/page-query.schema';
@@ -25,14 +31,14 @@ export class TeamController {
 
   @Post()
   @UsePipes(new ZodValidationPipe(teamSchema))
-  CreateTeam(@Body() body: TeamSchema, @Req() req: Request) {
+  createTeam(@Body() body: TeamSchema, @Req() req: Request) {
     const userId = req.user.sub;
 
     return this.teamService.createTeam(body, userId);
   }
 
   @Get()
-  GetTeams(
+  getTeams(
     @Req() req: Request,
     @Query('page', queryValPipe) page: PageQuerySchema,
   ) {
@@ -42,9 +48,20 @@ export class TeamController {
   }
 
   @Get('/:id')
-  GetTeamId(@Param('id') teamId: string, @Req() req: Request) {
+  getTeamId(@Param('id') teamId: string, @Req() req: Request) {
     const userId = req.user.sub;
 
     return this.teamService.getTeam(teamId, userId);
+  }
+
+  @Put('/:id')
+  updateTeam(
+    @Body(new ZodValidationPipe(updateTeamSchema)) data: UpdateTeamSchema,
+    @Param('id') teamId: string,
+    @Req() req: Request,
+  ) {
+    const userId = req.user.sub;
+
+    return this.teamService.updateTeam(data, teamId, userId);
   }
 }
