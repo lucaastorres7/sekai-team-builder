@@ -24,7 +24,7 @@ export class AuthService {
       throw new BadRequestException('Your credentials do not match');
     }
 
-    const payload = { sub: user.id };
+    const payload = { sub: user.id, isAdmin: user.isAdmin };
 
     const { token } = this.tokenService.getToken(payload);
 
