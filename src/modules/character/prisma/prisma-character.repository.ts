@@ -1,8 +1,13 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ICharacterRepository } from '../character-interface';
 import {
   CharacterSchema,
   CreateCharacterSchema,
+  UpdateCharacterSchema,
 } from '../schemas/character.schema';
 import { PrismaService } from '@/prisma/prisma.service';
 
@@ -49,5 +54,32 @@ export class PrismaCharacterRepository implements ICharacterRepository {
     const character = await this.prisma.character.create({ data });
 
     return character;
+  }
+
+  async update(data: UpdateCharacterSchema, id: string): Promise<boolean> {
+    const exist = await this.prisma.character.findUnique({ where: { id } });
+
+    if (!exist) {
+      throw new NotFoundException('This character does not exist');
+    }
+
+    const character = await this.prisma.character.update({
+      where: { id },
+      data,
+    });
+
+    return true;
+  }
+
+  async delete(id: string): Promise<boolean> {
+    const exist = await this.prisma.character.findUnique({ where: { id } });
+
+    if (!exist) {
+      throw new NotFoundException('this character does not exist');
+    }
+
+    await this.prisma.character.delete({ where: { id } });
+
+    return true;
   }
 }

@@ -1,8 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
+  Put,
   Query,
   UseGuards,
   UsePipes,
@@ -12,6 +15,8 @@ import { AdminGuard } from '@/security/guards/admin.guard';
 import {
   createCharacterSchema,
   CreateCharacterSchema,
+  UpdateCharacterSchema,
+  updateCharacterSchema,
 } from './schemas/character.schema';
 import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
 
@@ -29,5 +34,21 @@ export class CharacterController {
   @UsePipes(new ZodValidationPipe(createCharacterSchema))
   createCharacter(@Body() body: CreateCharacterSchema) {
     return this.characterService.create(body);
+  }
+
+  @UseGuards(AdminGuard)
+  @Put('/:id')
+  updateCharacter(
+    @Body(new ZodValidationPipe(updateCharacterSchema))
+    body: UpdateCharacterSchema,
+    @Param('id') id: string,
+  ) {
+    return this.characterService.update(body, id);
+  }
+
+  @UseGuards(AdminGuard)
+  @Delete('/:id')
+  deleteCharacter(@Param('id') id: string) {
+    return this.characterService.delete(id);
   }
 }

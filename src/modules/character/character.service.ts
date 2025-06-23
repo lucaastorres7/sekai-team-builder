@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { ICharacterRepository } from './character-interface';
-import { CreateCharacterSchema } from './schemas/character.schema';
+import {
+  CreateCharacterSchema,
+  UpdateCharacterSchema,
+} from './schemas/character.schema';
 
 @Injectable()
 export class CharacterService {
@@ -13,5 +16,13 @@ export class CharacterService {
 
   create(body: CreateCharacterSchema) {
     return this.character.create(body);
+  }
+
+  update(body: UpdateCharacterSchema, id: string) {
+    return this.character.update(body, id);
+  }
+
+  delete(id: string) {
+    return this.character.delete(id);
   }
 }
