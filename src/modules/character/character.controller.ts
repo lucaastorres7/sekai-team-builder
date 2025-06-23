@@ -29,6 +29,11 @@ export class CharacterController {
     return this.characterService.getAll(query || '');
   }
 
+  @Get('/:id')
+  getCharacterById(@Param('id') id: string) {
+    return this.characterService.getById(id);
+  }
+
   @UseGuards(AdminGuard)
   @Post()
   @UsePipes(new ZodValidationPipe(createCharacterSchema))

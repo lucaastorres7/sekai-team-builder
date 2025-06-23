@@ -40,6 +40,18 @@ export class PrismaCharacterRepository implements ICharacterRepository {
     return characters;
   }
 
+  async getById(id: string): Promise<CharacterSchema | null> {
+    const character = await this.prisma.character.findUnique({
+      where: { id },
+    });
+
+    if (!character) {
+      throw new NotFoundException(`character not found`);
+    }
+
+    return character;
+  }
+
   async create(data: CreateCharacterSchema): Promise<CharacterSchema> {
     const exist = await this.prisma.character.findFirst({
       where: { name: data.name, unit: data.unit },

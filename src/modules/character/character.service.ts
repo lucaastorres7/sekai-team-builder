@@ -14,6 +14,10 @@ export class CharacterService {
     return characters;
   }
 
+  getById(id: string) {
+    return this.character.getById(id);
+  }
+
   create(body: CreateCharacterSchema) {
     return this.character.create(body);
   }
