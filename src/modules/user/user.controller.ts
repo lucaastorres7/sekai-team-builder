@@ -16,7 +16,6 @@ import { ZodValidationPipe } from '@/pipes/zod-validation.pipe';
 import { UserService } from './user.service';
 import { AuthGuard } from '@/security/guards/auth.guard';
 import { Request } from 'express';
-import { AdminGuard } from '@/security/guards/admin.guard';
 
 @Controller('/users')
 export class UserController {

@@ -41,7 +41,7 @@ model Card {
   updatedAt DateTime @updatedAt
 
   characterId String
-  character   Character @relation(fields: [characterId], references: [id]) // Uma carta pertence a um personagem
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade) // Uma carta pertence a um personagem
 
   teams Team[] // Uma carta pode estar em vários times
 }
@@ -53,7 +53,7 @@ model Team {
   updatedAt DateTime @updatedAt
 
   userId    String
-  user      User     @relation(fields: [userId], references: [id]) // Um time pertence a um User
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // Um time pertence a um User
 
   cards Card[] // Um time pode ter várias cartas
 }
