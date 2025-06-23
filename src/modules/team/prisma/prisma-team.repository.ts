@@ -6,6 +6,7 @@ import {
   teamSchema,
   TeamSchema,
 } from '../schema/team.schema';
+import { PageQuerySchema } from '../schema/page-query.schema';
 
 @Injectable()
 export class PrismaTeamRepository implements ITeamRepository {
@@ -31,5 +32,22 @@ export class PrismaTeamRepository implements ITeamRepository {
     });
 
     return team;
+  }
+
+  async getAll(
+    userId: string,
+    page: PageQuerySchema,
+  ): Promise<CreatedTeamSchema[] | null> {
+    const teams = this.prisma.team.findMany({
+      where: { userId },
+      include: { cards: true },
+      take: 5,
+      skip: (page - 1) * 5,
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return teams;
   }
 }
