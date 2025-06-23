@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IUserRepository } from '../user-interface';
 import { CreateUserSchema, UserSchema } from '../schemas/create-user.schema';
 import { PrismaService } from '@/prisma/prisma.service';
@@ -17,5 +21,21 @@ export class PrismaUserRepository implements IUserRepository {
       where: { email },
     });
     return user;
+  }
+
+  async delete(id: string, reqId: string): Promise<boolean> {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new NotFoundException('user was not found');
+    }
+
+    if (user.id !== reqId) {
+      throw new BadRequestException('You can not delete another user');
+    }
+
+    await this.prisma.user.delete({ where: { id } });
+
+    return true;
   }
 }

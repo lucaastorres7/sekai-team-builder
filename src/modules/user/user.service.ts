@@ -26,4 +26,8 @@ export class UserService {
 
     return { message: 'user created successfully' };
   }
+
+  async delete(id: string, reqId: string) {
+    return this.user.delete(id, reqId);
+  }
 }
