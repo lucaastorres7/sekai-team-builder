@@ -1,4 +1,6 @@
 import {
+  BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -17,9 +19,40 @@ import { PageQuerySchema } from '../schema/page-query.schema';
 export class PrismaTeamRepository implements ITeamRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async verifyTeamCard(cardsId: string[]): Promise<boolean> {
+    const foundCards = await this.prisma.card.findMany({
+      where: {
+        id: {
+          in: cardsId,
+        },
+      },
+      select: {
+        characterId: true,
+      },
+    });
+
+    if (foundCards.length !== cardsId.length) {
+      throw new BadRequestException('one or more cards do not exist');
+    }
+
+    const characterIds = foundCards.map((card) => card.characterId);
+    const uniqueId = new Set(characterIds);
+
+    if (characterIds.length !== uniqueId.size) {
+      throw new ConflictException(
+        'you cannot have more than one card of the same character',
+      );
+    }
+
+    return true;
+  }
+
   async create(body: TeamSchema, userId: string): Promise<CreatedTeamSchema> {
     const { name, cardsId } = body;
-    const cardsToConnect = cardsId.map((card) => ({ id: card }));
+
+    await this.verifyTeamCard(cardsId);
+
+    const cardsToConnect = cardsId.map((id) => ({ id }));
 
     const team = await this.prisma.team.create({
       data: {

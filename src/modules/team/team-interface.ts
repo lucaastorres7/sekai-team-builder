@@ -6,6 +6,7 @@ import {
 } from './schema/team.schema';
 
 export abstract class ITeamRepository {
+  abstract verifyTeamCard(cardsId: string[]): Promise<boolean>;
   abstract create(data: TeamSchema, userId: string): Promise<CreatedTeamSchema>;
   abstract getAll(
     userId: string,

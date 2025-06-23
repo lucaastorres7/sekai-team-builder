@@ -31,7 +31,7 @@ export class PrismaUserRepository implements IUserRepository {
     }
 
     if (user.id !== reqId) {
-      throw new BadRequestException('You can not delete another user');
+      throw new BadRequestException('You cannot delete another user');
     }
 
     await this.prisma.user.delete({ where: { id } });
