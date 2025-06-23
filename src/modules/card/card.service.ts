@@ -10,6 +10,10 @@ export class CardService {
     return this.card.getAll(query || '');
   }
 
+  getById(id: string) {
+    return this.card.getById(id);
+  }
+
   create(data: CreateCardSchema) {
     return this.card.create(data);
   }

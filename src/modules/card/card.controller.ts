@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   UseGuards,
@@ -19,6 +20,11 @@ export class CardController {
   @Get()
   getCards(@Query('title') query: string) {
     return this.cardService.getAll(query || '');
+  }
+
+  @Get('/:id')
+  getCard(@Param('id') id: string) {
+    return this.cardService.getById(id);
   }
 
   @UseGuards(AdminGuard)

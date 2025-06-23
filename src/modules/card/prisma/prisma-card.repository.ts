@@ -26,6 +26,18 @@ export class PrismaCardRepository implements ICardRepository {
     return cards;
   }
 
+  async getById(id: string): Promise<CardSchema> {
+    const card = await this.prisma.card.findUnique({
+      where: { id },
+    });
+
+    if (!card) {
+      throw new NotFoundException(`card not found`);
+    }
+
+    return card;
+  }
+
   async create(data: CreateCardSchema): Promise<CardSchema> {
     const charExist = await this.prisma.character.findFirst({
       where: { id: data.characterId },
