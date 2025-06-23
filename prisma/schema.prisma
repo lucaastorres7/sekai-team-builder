@@ -23,7 +23,7 @@ model Character {
   id       String @id @default(uuid())
   name     String
   surname  String
-  unit     String
+  unit     Units
   imageUrl String
 
   card Card[]
@@ -31,7 +31,7 @@ model Character {
 
 model Card {
   id          String @id @default(uuid())
-  title       String
+  title       String @unique()
   rarity      CardRarity
   attribute   CardAttribute
   imageUrl    String
@@ -66,4 +66,12 @@ enum CardAttribute {
   HAPPY
   MYSTERIOUS
   PURE
+}
+
+enum Units {
+  NIGHTCORD
+  LEO_NEED
+  VIVID_SQUAD
+  SHOWTIME
+  MORE_JUMP
 }
