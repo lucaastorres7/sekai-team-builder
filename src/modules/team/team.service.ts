@@ -14,4 +14,8 @@ export class TeamService {
   getTeams(userId: string, page: PageQuerySchema) {
     return this.team.getAll(userId, page);
   }
+
+  getTeam(teamId: string, userId: string) {
+    return this.team.getById(teamId, userId);
+  }
 }

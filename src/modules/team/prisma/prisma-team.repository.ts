@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from '@/prisma/prisma.service';
 import { ITeamRepository } from '../team-interface';
 import {
@@ -38,7 +42,7 @@ export class PrismaTeamRepository implements ITeamRepository {
     userId: string,
     page: PageQuerySchema,
   ): Promise<CreatedTeamSchema[] | null> {
-    const teams = this.prisma.team.findMany({
+    const teams = await this.prisma.team.findMany({
       where: { userId },
       include: { cards: true },
       take: 5,
@@ -49,5 +53,25 @@ export class PrismaTeamRepository implements ITeamRepository {
     });
 
     return teams;
+  }
+
+  async getById(
+    teamId: string,
+    userId: string,
+  ): Promise<CreatedTeamSchema | null> {
+    const team = await this.prisma.team.findUnique({
+      where: { id: teamId },
+      include: { cards: true },
+    });
+
+    if (!team) {
+      throw new NotFoundException(`team not found`);
+    }
+
+    if (team.userId !== userId) {
+      throw new ForbiddenException('This team is not yours');
+    }
+
+    return team;
   }
 }

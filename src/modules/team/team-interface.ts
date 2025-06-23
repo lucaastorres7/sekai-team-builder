@@ -7,4 +7,8 @@ export abstract class ITeamRepository {
     userId: string,
     page: PageQuerySchema,
   ): Promise<CreatedTeamSchema[] | null>;
+  abstract getById(
+    teamId: string,
+    userId: string,
+  ): Promise<CreatedTeamSchema | null>;
 }

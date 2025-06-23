@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -38,5 +39,12 @@ export class TeamController {
     const userId = req.user.sub;
 
     return this.teamService.getTeams(userId, page);
+  }
+
+  @Get('/:id')
+  GetTeamId(@Param('id') teamId: string, @Req() req: Request) {
+    const userId = req.user.sub;
+
+    return this.teamService.getTeam(teamId, userId);
   }
 }
